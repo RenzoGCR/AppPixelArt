@@ -11,12 +11,15 @@ import java.io.IOException;
 public class PixelArtProcessor {
     private final ImageLoader loader;
     private final ImageResizer resizer;
+    private final ColorQuantizer quantizer;
     private final ImageSaver saver;
 
+
     // Constructor que recibe las dependencias
-    public PixelArtProcessor(ImageLoader loader, ImageResizer resizer, ImageSaver saver) {
+    public PixelArtProcessor(ImageLoader loader, ImageResizer resizer,ColorQuantizer quantizer, ImageSaver saver) {
         this.loader = loader;
         this.resizer = resizer;
+        this.quantizer = quantizer;
         this.saver = saver;
     }
 
@@ -30,7 +33,11 @@ public class PixelArtProcessor {
             System.out.println("Redimensionando a " + targetWidth + "x" + targetHeight + "px...");
             BufferedImage resizedImage = resizer.resize(originalImage, targetWidth, targetHeight);
 
-            // 3. Guardar la imagen redimensionada
+            // 3. Cuantizar los colores (APLICAR EL EFECTO PIXEL ART)
+            System.out.println("Aplicando cuantización de color...");
+            BufferedImage quantizedImage = quantizer.quantize(resizedImage); // LLAMADA CLAVE
+
+            // 4. Guardar la imagen redimensionada
             System.out.println("Guardando imagen en: " + destinationImagePath);
             saver.saveImage(resizedImage, destinationImagePath);
 
